@@ -1,0 +1,82 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'fontSize': '11px'}}}%%
+
+flowchart TB
+    VIDEO["🎥 CCTV Video"] --> MOD_A
+
+    subgraph MOD_A["MODULE A — Offline Tracker (ZERO API calls)"]
+        YD["YOLOv26m + BoTSORT<br/>Person detect + track"] --> DB[("SQLite DB<br/>tracks, keyframes<br/>quality scores")]
+    end
+
+    DB --> P1
+
+    subgraph AGENT["MODULE B — Agent Pipeline (26 Tools)"]
+
+        subgraph P1["PHASE 1 — Scene Understanding"]
+            T01["t01 ingest_from_db"]
+            T03["t03 calibrate_from_person_height<br/>📐 bbox heights → BEV homography<br/>NO API needed"]
+            T04["t04 classify_scene_type"]
+            T05["t05 🤖 vlm_scene_layout<br/>Full-frame spatial analysis"]
+            T06["t06 ☁️ depth_scene_analysis<br/>Replicate: 1 call on ref frame<br/>Scene spatial knowledge"]
+        end
+
+        subgraph P2["PHASE 2 — Ensemble Zone Discovery"]
+            T07["t07 compute_dwell_points<br/>BEV m/s + confinement"]
+            T08["t08 🅰️ Dwell ST-DBSCAN"]
+            T09["t09 🅱️ Occupancy Grid"]
+            T10["t10 🅲️ Trajectory Graph"]
+            T11["t11 FUSE: Voting"]
+            T12["t12 🤖 vlm_detect_structures<br/>Find counters, tables, doors"]
+        end
+
+        subgraph P3["PHASE 3 — VLM Toolkit (Zone Enrichment)"]
+            T13["t13 crop_zone_images"]
+            T14["t14 ☁️ depth_zone_analysis<br/>Replicate: 1 call per zone crop<br/>Physical size estimation"]
+            T15["t15 🤖 vlm_object_inventory<br/>Detect every object in zone"]
+            T16["t16 🤖 vlm_signage_reader<br/>Extract text, business names"]
+            T17["t17 🤖 vlm_zone_classifier<br/>Objects + behavior → type"]
+            T18["t18 🤖 vlm_zone_describer<br/>Rich text description"]
+            T19["t19 merge_zone_registry"]
+        end
+
+        subgraph P4["PHASE 4 — Analytics"]
+            T20["t20-t23 Zone, Flow,<br/>Temporal, Spatial analytics"]
+        end
+
+        subgraph P5["PHASE 5 — Validation"]
+            T24["t24 validate_zones"]
+            T25{"t25 quality_gate"}
+        end
+
+        subgraph P6["PHASE 6 — Visualization"]
+            T26["t26 🤖 plan_visualizations<br/>LLM decides chart types"]
+            T27["t27-t29 Render + Export"]
+        end
+    end
+
+    P1 --> P2 --> P3 --> P4 --> P5
+    T25 -->|"PASS ✅"| P6
+    T25 -->|"FAIL ❌"| P2
+
+    T27 --> DASH
+
+    subgraph DASH["MODULE C — React Dashboard"]
+        direction LR
+        D1["KPIs"] --- D2["Zone Maps"] --- D3["Sankey"]
+        D4["Heatmap"] --- D5["3D View"] --- D6["Replay"] --- D7["Debug"]
+    end
+
+    subgraph APIs["☁️ External APIs (Module B only)"]
+        OR["OpenRouter<br/>Qwen3.5 VLM<br/>~51 calls"]
+        REP["Replicate<br/>Depth Pro<br/>~13 calls"]
+    end
+
+    T05 & T12 & T15 & T16 & T17 & T18 & T26 -.-> OR
+    T06 & T14 -.-> REP
+
+    style MOD_A fill:#0a1a0a,stroke:#00ff88,stroke-width:2px
+    style P1 fill:#0a0a15,stroke:#339dff
+    style P2 fill:#0a0a15,stroke:#339dff
+    style P3 fill:#15081a,stroke:#b366ff,stroke-width:3px
+    style P5 fill:#1a0808,stroke:#ff3366
+    style T03 fill:#0a1a0a,stroke:#00ff88,stroke-width:2px
+    style T25 fill:#1a0808,stroke:#ff3366,stroke-width:3px

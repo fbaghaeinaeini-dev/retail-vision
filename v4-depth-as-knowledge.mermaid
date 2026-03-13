@@ -1,0 +1,36 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'fontSize': '12px'}}}%%
+
+flowchart LR
+    subgraph OLD["❌ OLD: Depth in Tracker (v3)"]
+        direction TB
+        V1["Video frame 1"] --> D1["Depth API call"]
+        V2["Video frame 150"] --> D2["Depth API call"]
+        V3["Video frame 300"] --> D3["Depth API call"]
+        VN["... frame N"] --> DN["Depth API call"]
+        D1 & D2 & D3 & DN --> STORE["Store all depth maps<br/>in database<br/>💰 Expensive: N calls"]
+    end
+
+    subgraph NEW["✅ NEW: Depth as Knowledge Tool (v4)"]
+        direction TB
+        
+        subgraph TRACKER["Module A: Tracker<br/>(ZERO API calls)"]
+            VID["Video"] --> YOLO["YOLOv26 + BoTSORT"]
+            YOLO --> TRACKS["Tracks + Keyframes"]
+        end
+        
+        subgraph AGENT["Module B: Agent Pipeline"]
+            
+            subgraph DEPTH_USE["Depth: 2 Usage Points"]
+                REF["t06: Reference frame<br/>→ Depth Pro (1 call)<br/>→ Scene spatial map<br/>→ Refine BEV calibration<br/>→ Depth range for scene type"]
+                
+                CROPS["t14: Zone crops<br/>→ Depth Pro (~12 calls)<br/>→ Physical size per zone<br/>→ Context for VLM prompts<br/>→ 3D visualization data"]
+            end
+        end
+        
+        TOTAL["💰 Total: ~13 API calls<br/>vs thousands in old approach<br/>~$0.13 total cost"]
+    end
+
+    style OLD fill:#1a0808,stroke:#ff3366,stroke-width:2px
+    style TRACKER fill:#0a1a0a,stroke:#00ff88
+    style DEPTH_USE fill:#0a0a1a,stroke:#339dff
+    style TOTAL fill:#0a1a0a,stroke:#00ff88,stroke-width:2px

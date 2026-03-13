@@ -1,0 +1,16 @@
+# BoTSORT configuration tuned for retail CCTV
+# Key: high track_buffer (3s at 30fps) for occlusion handling,
+# ReID enabled for identity preservation across occlusions
+
+tracker_type: botsort
+track_high_thresh: 0.25
+track_low_thresh: 0.1
+new_track_thresh: 0.25
+track_buffer: 90            # 3s at 30fps — handles CCTV occlusions
+match_thresh: 0.8
+fuse_score: true
+with_reid: true             # Identity preservation across occlusions
+model: "auto"               # Use YOLO native features for ReID
+gmc_method: sparseOptFlow   # Minimal computation for fixed camera
+proximity_thresh: 0.5
+appearance_thresh: 0.25

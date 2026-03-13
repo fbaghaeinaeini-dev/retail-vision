@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0a0a0f;
+  --color-bg-card: #12121a;
+  --color-bg-hover: #1a1a26;
+  --color-border: #1e1e2e;
+  --color-text-primary: #e8e8ec;
+  --color-text-secondary: #6e6e82;
+  --color-accent-cyan: #00d4ff;
+  --color-accent-amber: #ff9500;
+  --color-accent-green: #00ff88;
+  --color-accent-red: #ff3366;
+  --color-accent-orange: #e8632b;
+
+  --color-zone-restaurant: #ff6b35;
+  --color-zone-cafe: #ffc233;
+  --color-zone-seating: #339dff;
+  --color-zone-corridor: #4a4a5e;
+  --color-zone-entrance: #00ff88;
+  --color-zone-shop: #b366ff;
+  --color-zone-unknown: #3a3a4e;
+  --color-viz-header: #141420;
+
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* Light theme overrides */
+[data-theme="light"] {
+  --color-bg-primary: #f8f9fa;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f0f1f3;
+  --color-border: #e2e4e8;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b7280;
+  --color-accent-cyan: #0891b2;
+  --color-accent-amber: #d97706;
+  --color-accent-green: #059669;
+  --color-accent-red: #dc2626;
+  --color-viz-header: #edf0f3;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+@keyframes pulse-dot {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
+}
+
+/* Prompt showcase vertical marquee */
+@keyframes marquee-scroll {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes stripSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes notifyPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 149, 0, 0.5); }
+  50% { box-shadow: 0 0 0 4px rgba(255, 149, 0, 0); }
+}
+
+.prompt-marquee {
+  animation: marquee-scroll 60s linear infinite;
+}
+
+.prompt-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Hide scrollbar on thumbnail strip */
+.viz-thumb-strip::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,49 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'fontSize': '11px'}}}%%
+
+flowchart TB
+    subgraph ZONE_INPUT["Per Zone: Inputs"]
+        CROP["Zone Crop<br/>(+20% margin)"]
+        CROP_W["Zone Crop Wide<br/>(+40% margin)"]
+        DEPTH["Depth Info<br/>~4m × 3m at 8m"]
+        BEHAVIOR["Behavioral Data<br/>avg dwell 5m, 40 visits/hr"]
+    end
+
+    CROP --> T15
+    DEPTH --> T15
+    CROP --> T16
+    CROP_W --> T16
+
+    subgraph VLM_TOOLKIT["🤖 VLM TOOLKIT — 5 Specialized Tools"]
+        direction TB
+
+        T15["🔍 vlm_object_inventory<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Prompt: 'List EVERY object'<br/><br/>Output:<br/>• round dining table × 4<br/>• plastic chairs × 12<br/>• cash register × 1<br/>• menu board × 1<br/>• napkin dispenser × 2"]
+
+        T16["📝 vlm_signage_reader<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Prompt: 'Read ALL text/signs'<br/>Uses WIDE crop for overhead signs<br/><br/>Output:<br/>• 'SUBWAY' (business_name, 0.95)<br/>• '$5.99 Footlong' (menu, 0.8)<br/>• 'Order Here →' (directional, 0.7)"]
+
+        T15 --> T17
+        T16 --> T17
+        BEHAVIOR --> T17
+        DEPTH --> T17
+
+        T17["🏷️ vlm_zone_classifier<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Prompt: objects + signage +<br/>behavior + depth → classify<br/><br/>Input synthesis:<br/>• Has counter + register → shop<br/>• Has tables + chairs → seating<br/>• Signage says 'SUBWAY' → fast_food<br/>• Dwell 5min confirms dining<br/><br/>Output: fast_food (0.94)"]
+
+        T17 --> T18
+
+        T18["✍️ vlm_zone_describer<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Prompt: ALL data → description<br/><br/>Output: 'Subway fast-food outlet<br/>with service counter, menu board,<br/>and 4 dining tables. Approx 4m×3m.<br/>Peak at 13:00, avg 5min dwell.<br/>40 visitors/hr, 65% male.'"]
+    end
+
+    subgraph ALSO["Also in Phase 2"]
+        T12["🏗️ vlm_detect_structures<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Runs on FULL FRAME<br/>Finds structures even if<br/>no one is nearby<br/><br/>Output: counters, table clusters,<br/>doorways with bbox locations"]
+
+        T05["🗺️ vlm_scene_layout<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Runs on FULL FRAME first<br/>Before any zone discovery<br/><br/>Output: 'Food court with 3 shops<br/>along top wall, central seating,<br/>main corridor runs left-right'"]
+    end
+
+    T18 --> MERGE["📋 Zone Registry<br/>Named, typed, described<br/>with object inventory"]
+
+    style T15 fill:#1a0a2a,stroke:#b366ff
+    style T16 fill:#1a0a2a,stroke:#b366ff
+    style T17 fill:#1a0a2a,stroke:#b366ff,stroke-width:3px
+    style T18 fill:#1a0a2a,stroke:#b366ff
+    style T12 fill:#1a0a2a,stroke:#b366ff
+    style T05 fill:#1a0a2a,stroke:#b366ff
+    style MERGE fill:#0a1a0a,stroke:#00ff88,stroke-width:2px

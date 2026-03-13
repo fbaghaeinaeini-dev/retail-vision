@@ -1,0 +1,41 @@
+# Data & output
+data/
+output/
+*.db
+*.sqlite
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.venv/
+venv/
+
+# Models
+*.pt
+*.onnx
+*.engine
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (dashboard)
+dashboard/node_modules/
+dashboard/dist/
+
+# Jupyter
+.ipynb_checkpoints/

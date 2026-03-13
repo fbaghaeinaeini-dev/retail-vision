@@ -1,0 +1,106 @@
+# ============================================
+# RetailVision .gitignore
+# ============================================
+
+# ---------- Video / Media ----------
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wmv
+*.flv
+
+# ---------- Large binary / model weights ----------
+*.pt
+*.onnx
+*.engine
+*.pth
+*.h5
+*.tflite
+*.pb
+
+# ---------- Databases ----------
+*.db
+*.sqlite
+*.sqlite3
+
+# ---------- Data & Output ----------
+retailvision/data/
+retailvision/output/
+retailvision/debug/
+
+# ---------- Python ----------
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+.eggs/
+*.egg
+
+# ---------- Virtual environments ----------
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# ---------- Node.js ----------
+node_modules/
+dist/
+dist2/
+
+# ---------- Logs ----------
+*.log
+server.log
+vite.log
+
+# ---------- IDE / Editor ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ---------- Jupyter ----------
+.ipynb_checkpoints/
+
+# ---------- Tool / Plugin caches ----------
+.playwright-cli/
+.playwright-mcp/
+.pytest_cache/
+.serena/
+.superpowers/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Supabase temp ----------
+retailvision/supabase/.temp/
+
+# ---------- Dashboard screenshots (Playwright artifacts) ----------
+retailvision/dashboard/*.png
+retailvision/current-state.png
+
+# ---------- Root-level data files ----------
+*.csv
+*.mp4
+
+# ---------- Lock files (keep package-lock.json, ignore uv.lock) ----------
+uv.lock
+
+# ---------- Sensitive / credentials ----------
+*.pem
+*.key
+*.cert
+credentials.json
+vision-ai-supabase.txt
